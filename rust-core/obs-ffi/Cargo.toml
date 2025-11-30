@@ -10,6 +10,7 @@ obs-nvenc = { path = "../obs-nvenc" }
 obs-audio-mix = { path = "../obs-audio-mix" }
 libc = { workspace = true }
 log = { workspace = true }
+glam = { workspace = true }
 
 [build-dependencies]
 cbindgen = { workspace = true }

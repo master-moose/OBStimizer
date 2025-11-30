@@ -3,13 +3,13 @@
 //! Replaces mutex-based video-io.c with lock-free data structures
 //! for better performance on 8-core i7-9700K.
 
-use crate::types::{VideoFrame, VideoOutputInfo};
 use crate::frame_pool::FramePool;
+use crate::types::{VideoFrame, VideoOutputInfo};
+use crossbeam::channel::{self, Receiver, Sender};
 use crossbeam::queue::ArrayQueue;
-use crossbeam::channel::{self, Sender, Receiver};
 use parking_lot::RwLock;
-use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
+use std::sync::Arc;
 use std::thread::{self, JoinHandle};
 use std::time::Duration;
 
@@ -39,7 +39,7 @@ pub struct VideoOutput {
 
 struct CachedFrame {
     frame: VideoFrame,
-    timestamp: u64,
+    _timestamp: u64, // Stored for timestamp management
 }
 
 struct EncoderConnection {
@@ -80,7 +80,7 @@ impl VideoOutput {
             total_frames.clone(),
             skipped_frames.clone(),
             running.clone(),
-            info.clone(),
+            info,
         );
 
         VideoOutput {
@@ -109,7 +109,10 @@ impl VideoOutput {
     pub fn unlock_frame(&self, mut frame: VideoFrame, timestamp: u64) -> bool {
         frame.timestamp = timestamp;
 
-        let cached = CachedFrame { frame: frame.clone(), timestamp };
+        let cached = CachedFrame {
+            frame: frame.clone(),
+            _timestamp: timestamp,
+        };
 
         match self.frame_queue.push(cached) {
             Ok(_) => true,
@@ -307,6 +310,10 @@ mod tests {
             received += 1;
         }
 
-        assert!(received >= 4 && received <= 6, "Expected ~5 frames, got {}", received);
+        assert!(
+            received >= 4 && received <= 6,
+            "Expected ~5 frames, got {}",
+            received
+        );
     }
 }

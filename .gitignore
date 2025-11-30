@@ -10,6 +10,7 @@
 !/frontend
 !/libobs*
 !/plugins
+!/rust-core
 !/shared
 !/test
 !.cirrus.xml
@@ -31,6 +32,7 @@
 !COPYING
 !INSTALL
 !README.rst
+!BUILD_INSTRUCTIONS.md
 
 # Exclude lock files
 *.lock.json

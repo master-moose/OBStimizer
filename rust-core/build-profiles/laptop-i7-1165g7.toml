@@ -1,0 +1,68 @@
+# Build Profile: Laptop - Intel i7-1165G7 + Iris Xe
+# Hardware: 4 cores, 8 threads (HT), 2.8-4.7GHz, AVX2, 24GB RAM
+# GPU: Intel Iris Xe (Integrated), QuickSync available
+
+[hardware]
+name = "Laptop - i7-1165G7 + Iris Xe"
+cpu_cores = 4
+cpu_threads = 8
+has_hyperthreading = true
+has_avx2 = true
+has_nvenc = false
+has_quicksync = true
+gpu_model = "Iris Xe"
+ram_gb = 24
+
+[optimizations]
+# CPU Features
+target_cpu = "tigerlake"
+target_features = "+avx2,+fma,+sse4.2"
+
+# Thread Configuration (fewer physical cores, use HT efficiently)
+video_threads = 2       # Rendering + Encoding
+audio_threads = 1       # Dedicated audio thread
+compositor_threads = 1  # Single thread (fewer cores)
+encoder_threads = 2     # QuickSync + fallback
+
+# Thread Pinning Strategy
+# Tiger Lake benefits from HT, so pin to logical cores
+# Physical cores 0-3, logical 0-7
+pin_video_thread = 0    # Physical core 0
+pin_audio_thread = 1    # Physical core 0 (HT sibling)
+pin_render_thread = 2   # Physical core 1
+pin_encoder_thread = 3  # Physical core 1 (HT sibling)
+# Cores 4-7 (physical 2-3 + HT) for sources, filters
+
+# Memory Configuration (more RAM available)
+frame_pool_size = 12    # Larger pool due to more RAM
+audio_buffer_size = 1024
+use_huge_pages = false
+
+# SIMD Optimization
+prefer_avx2 = true
+simd_alignment = 32     # AVX2 requires 32-byte alignment
+
+# GPU Configuration
+use_nvenc = false
+use_quicksync = true    # Intel QuickSync Video
+qsv_preset = "balanced"
+qsv_target_usage = 4    # 1=quality, 7=speed (4=balanced)
+gpu_priority = "normal" # Conservative for laptop
+
+# Power Management
+thermal_aware = true    # Throttle if temps high
+max_tdp_watts = 28      # Tiger Lake TDP
+target_temp_celsius = 85  # Thermal target
+
+[build]
+profile = "release"
+lto = "thin"            # Thin LTO (faster builds, still optimized)
+codegen_units = 4       # More parallelism for HT
+opt_level = 3           # Maximum optimization
+
+[runtime]
+# Performance tuning flags
+force_simd = true
+cpu_affinity = true     # Enable thread pinning
+realtime_priority = false
+power_efficient = true  # Laptop power saving mode

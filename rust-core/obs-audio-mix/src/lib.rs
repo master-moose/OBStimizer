@@ -7,12 +7,12 @@
 //! - Parallel mix processing with rayon
 //! - Lock-free encoder dispatch
 
-pub mod mixer;
 pub mod clamping;
+pub mod mixer;
 pub mod types;
 
-pub use mixer::*;
 pub use clamping::*;
+pub use mixer::*;
 pub use types::*;
 
 #[cfg(test)]

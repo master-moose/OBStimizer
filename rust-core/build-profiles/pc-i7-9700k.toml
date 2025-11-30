@@ -1,0 +1,60 @@
+# Build Profile: Desktop PC - Intel i7-9700K + RTX 3050
+# Hardware: 8 cores, 8 threads, 3.6-4.9GHz, AVX2, 16GB RAM
+# GPU: RTX 3050 8GB, 7th-gen NVENC
+
+[hardware]
+name = "PC - i7-9700K + RTX 3050"
+cpu_cores = 8
+cpu_threads = 8
+has_hyperthreading = false
+has_avx2 = true
+has_nvenc = true
+gpu_model = "RTX 3050"
+ram_gb = 16
+
+[optimizations]
+# CPU Features
+target_cpu = "skylake"  # Coffee Lake compatible
+target_features = "+avx2,+fma,+sse4.2"
+
+# Thread Configuration
+video_threads = 2       # Rendering + Encoding
+audio_threads = 1       # Dedicated audio thread
+compositor_threads = 2  # Scene composition
+encoder_threads = 2     # NVENC + fallback
+
+# Thread Pinning Strategy
+# Pin critical threads to physical cores to avoid cache thrashing
+pin_video_thread = 0    # Core 0 - Video output
+pin_audio_thread = 1    # Core 1 - Audio mixer
+pin_render_thread = 2   # Core 2 - Scene rendering
+pin_encoder_thread = 3  # Core 3 - NVENC coordination
+# Cores 4-7 available for sources, filters, encoding fallback
+
+# Memory Configuration
+frame_pool_size = 8     # Pre-allocated video frames
+audio_buffer_size = 1024
+use_huge_pages = false  # Not typically needed for 16GB
+
+# SIMD Optimization
+prefer_avx2 = true
+simd_alignment = 32     # AVX2 requires 32-byte alignment
+
+# GPU Configuration
+use_nvenc = true
+nvenc_preset = "p5"     # Quality preset (p1=fastest, p7=slowest)
+nvenc_tuning = "ultra_low_latency"
+nvenc_multipass = "qres"  # Quarter-resolution lookahead
+gpu_priority = "high"
+
+[build]
+profile = "release"
+lto = "fat"             # Full Link-Time Optimization
+codegen_units = 1       # Single codegen unit for max optimization
+opt_level = 3           # Maximum optimization
+
+[runtime]
+# Performance tuning flags
+force_simd = true
+cpu_affinity = true     # Enable thread pinning
+realtime_priority = false  # Requires root, disable by default

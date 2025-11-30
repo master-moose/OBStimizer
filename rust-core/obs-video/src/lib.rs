@@ -9,14 +9,14 @@
 //! - Memory pooling to reduce allocation churn
 
 pub mod format_conversion;
-pub mod video_output;
 pub mod frame_pool;
 pub mod types;
+pub mod video_output;
 
 pub use format_conversion::*;
-pub use video_output::*;
 pub use frame_pool::*;
 pub use types::*;
+pub use video_output::*;
 
 #[cfg(test)]
 mod tests {
