@@ -1,14 +1,29 @@
 //! OBS Audio Mixer - Rust Optimization
 //!
-//! High-performance audio mixing optimized for i7-9700K.
+//! High-performance audio mixing with AVX SIMD optimization.
 //!
-//! TODO: Implement audio mixer with:
-//! - AVX SIMD for clamping (6-8x speedup)
+//! Key features:
+//! - AVX SIMD for audio clamping (6-8x speedup)
 //! - Parallel mix processing with rayon
 //! - Lock-free encoder dispatch
 
-#![allow(dead_code)]
+pub mod mixer;
+pub mod clamping;
+pub mod types;
 
-pub fn version() -> &'static str {
-    "0.1.0"
+pub use mixer::*;
+pub use clamping::*;
+pub use types::*;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_audio_mix_creation() {
+        let mix = AudioMix::new(48000, 1024, 8);
+        assert_eq!(mix.sample_rate(), 48000);
+        assert_eq!(mix.frames_per_buffer(), 1024);
+        assert_eq!(mix.channels(), 8);
+    }
 }
