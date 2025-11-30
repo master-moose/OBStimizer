@@ -1,0 +1,20 @@
+[package]
+name = "obs-video"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+crossbeam = { workspace = true }
+crossbeam-queue = { workspace = true }
+parking_lot = { workspace = true }
+bytemuck = { workspace = true }
+thiserror = { workspace = true }
+log = { workspace = true }
+core_affinity = { workspace = true }
+rand = "0.8"
+
+[dev-dependencies]
+criterion = { workspace = true }
+
+[lib]
+crate-type = ["staticlib", "rlib"]

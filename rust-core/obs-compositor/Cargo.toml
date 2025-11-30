@@ -1,0 +1,18 @@
+[package]
+name = "obs-compositor"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+parking_lot = { workspace = true }
+rayon = { workspace = true }
+glam = { workspace = true }
+bytemuck = { workspace = true }
+thiserror = { workspace = true }
+log = { workspace = true }
+
+[dev-dependencies]
+criterion = { workspace = true }
+
+[lib]
+crate-type = ["staticlib", "rlib"]

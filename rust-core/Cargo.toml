@@ -1,0 +1,65 @@
+[workspace]
+members = [
+    "obs-video",
+    "obs-compositor",
+    "obs-nvenc",
+    "obs-audio-mix",
+    "obs-ffi",
+]
+resolver = "2"
+
+[workspace.dependencies]
+# Performance - Lock-free data structures and parallelism
+crossbeam = "0.8"
+rayon = "1.10"
+parking_lot = "0.12"
+crossbeam-queue = "0.3"
+
+# SIMD - Using std::arch directly (no external deps needed)
+
+# GPU/CUDA (NVENC will be implemented later with direct SDK bindings)
+# cuda-sys = "0.2"
+
+# Math - SIMD-optimized linear algebra
+glam = { version = "0.28", features = ["bytemuck"] }
+bytemuck = { version = "1.14", features = ["derive"] }
+
+# FFI
+cxx = "1.0"
+cbindgen = "0.26"
+libc = "0.2"
+
+# Memory management
+mimalloc = "0.1"
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Profiling and benchmarking
+pprof = { version = "0.13", features = ["flamegraph", "criterion"] }
+criterion = { version = "0.5", features = ["html_reports"] }
+
+# Logging
+log = "0.4"
+
+# Thread affinity
+core_affinity = "0.8"
+
+[profile.release]
+opt-level = 3
+lto = "fat"          # Full LTO for maximum performance
+codegen-units = 1    # Single codegen unit for better optimization
+strip = false        # Keep symbols for profiling
+panic = "abort"      # Smaller binary, faster unwinding
+
+# Target-specific optimizations for i7-9700K (Coffee Lake)
+[profile.release.package."*"]
+opt-level = 3
+
+# Debug profile with optimizations for testing
+[profile.dev]
+opt-level = 2        # Some optimization for reasonable perf
+
+[profile.bench]
+inherits = "release"

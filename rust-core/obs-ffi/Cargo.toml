@@ -1,0 +1,18 @@
+[package]
+name = "obs-ffi"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+obs-video = { path = "../obs-video" }
+obs-compositor = { path = "../obs-compositor" }
+obs-nvenc = { path = "../obs-nvenc" }
+obs-audio-mix = { path = "../obs-audio-mix" }
+libc = { workspace = true }
+log = { workspace = true }
+
+[build-dependencies]
+cbindgen = { workspace = true }
+
+[lib]
+crate-type = ["staticlib", "cdylib"]

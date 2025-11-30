@@ -1,0 +1,18 @@
+[package]
+name = "obs-audio-mix"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+crossbeam = { workspace = true }
+rayon = { workspace = true }
+parking_lot = { workspace = true }
+thiserror = { workspace = true }
+log = { workspace = true }
+core_affinity = { workspace = true }
+
+[dev-dependencies]
+criterion = { workspace = true }
+
+[lib]
+crate-type = ["staticlib", "rlib"]
