@@ -32,7 +32,7 @@ jobs:
         cargo install cbindgen
         
     - name: Cache Rust dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.cargo/bin/
@@ -83,7 +83,7 @@ jobs:
         7z a ../obs-studio-rust-i7-9700k-windows.zip *
         
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: obs-studio-i7-9700k-windows
         path: obs-studio-rust-i7-9700k-windows.zip

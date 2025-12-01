@@ -32,7 +32,7 @@ jobs:
         cargo install cbindgen
         
     - name: Cache Rust dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.cargo/bin/
@@ -111,7 +111,7 @@ jobs:
         tar -czf ../obs-studio-rust-i7-1165g7-linux.tar.gz *
         
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: obs-studio-i7-1165g7-linux
         path: obs-studio-rust-i7-1165g7-linux.tar.gz
