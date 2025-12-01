@@ -32,7 +32,11 @@ jobs:
     - name: Generate C headers
       run: |
         cd rust-core/obs-ffi
-        cbindgen --config cbindgen.toml --crate obs-ffi --output obs-rust.h
+        if [ -f cbindgen.toml ]; then
+          cbindgen --config cbindgen.toml --crate obs-ffi --output obs-rust.h
+        else
+          cbindgen --crate obs-ffi --output obs-rust.h
+        fi
         
     - name: Package libraries
       run: |
