@@ -24,7 +24,7 @@ jobs:
         
     - name: Build Rust libraries (i7-1165G7 profile)
       run: |
-        export RUSTFLAGS="-C target-cpu=tigerlake -C target-feature=+avx2,+avx512f,+avx512dq -C opt-level=3"
+        export RUSTFLAGS="-C target-cpu=skylake -C target-feature=+avx2 -C opt-level=3"
         cd rust-core
         cargo build --release --workspace
         cargo test --release --workspace
